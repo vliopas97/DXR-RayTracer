@@ -27,12 +27,12 @@ void Application::Init(int width, int height, HINSTANCE instance, const char* ti
 
 void Application::Tick()
 {
-	//Update()
-	//Render()
+	GraphicsInterface->Tick();
 }
 
 Application::Application(int width, int height, HINSTANCE instance, const char* title)
-	:MainWindow(std::make_unique<Window>(width, height, instance, title))
+	:MainWindow(std::make_unique<Window>(width, height, instance, title)),
+	GraphicsInterface(std::make_unique<Graphics>(*MainWindow))
 {
 	assert(!Instance && "App instance not initialized");
 	Instance = this;

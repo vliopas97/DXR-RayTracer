@@ -13,5 +13,6 @@ struct Window
 
 	static std::optional<int> ProcessMessages();
 
-	HWND window;
+	HWND Handle;
+	int Width, Height;
 };

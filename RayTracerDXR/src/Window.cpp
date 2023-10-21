@@ -26,6 +26,7 @@ LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 Window::Window(int width, int height, HINSTANCE& instance, const char* title)
+	:Width(width), Height(height)
 {
 	const size_t cSize = strlen(title) + 1;
 	wchar_t* wTitle = new wchar_t[cSize];
@@ -56,14 +57,14 @@ Window::Window(int width, int height, HINSTANCE& instance, const char* title)
 
 	RECT rc = { 0, 0, width, height };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-	window = CreateWindow(wcex.lpszClassName, wTitle, WS_OVERLAPPEDWINDOW, x, 200, (rc.right - rc.left),
+	Handle = CreateWindow(wcex.lpszClassName, wTitle, WS_OVERLAPPEDWINDOW, x, 200, (rc.right - rc.left),
 						  (rc.bottom - rc.top), NULL, NULL, instance, NULL);
 
-	if (!window) assert(true && "Failed to create window");
+	if (!Handle) assert(true && "Failed to create window");
 	else
 	{
-		ShowWindow(window, SW_SHOWDEFAULT);
-		UpdateWindow(window);
+		ShowWindow(Handle, SW_SHOWDEFAULT);
+		UpdateWindow(Handle);
 	}
 }
 

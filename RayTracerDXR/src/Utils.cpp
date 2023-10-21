@@ -56,3 +56,12 @@ std::string ExceptionBase::TranslateErrorCode(HRESULT result) noexcept
 	LocalFree(pMsgBuf);
 	return errorString;
 }
+
+void d3d_trace_hr(const std::string& msg, const char* file, int line, HRESULT hr)
+{
+	char hr_msg[512];
+	FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, hr, 0, hr_msg, ARRAYSIZE(hr_msg), nullptr);
+	std::string fileLineInfo = "\n[ File: " + std::string(file) + " | Line: " + std::to_string(line) + " ]";
+	std::string error_msg = msg + fileLineInfo + ".\nError: " + hr_msg;
+	MessageBoxA(NULL, error_msg.c_str(), "Error", MB_OK);
+}

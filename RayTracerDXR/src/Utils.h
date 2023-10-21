@@ -1,6 +1,7 @@
 #pragma once
 
-#include <Windows.h>
+#include "Core.h"
+
 #include <exception>
 #include <iostream>
 
@@ -44,3 +45,13 @@ protected:
 	{\
 		MessageBoxA(nullptr, "No details available", "Unknown Exception", MB_OK | MB_ICONEXCLAMATION);\
 	}\
+
+void d3d_trace_hr(const std::string& msg, const char* file, int line, HRESULT hr);
+
+#define GRAPHICS_ASSERT(hrCall) \
+{ \
+    HRESULT hr = (hrCall); \
+    if (FAILED(hr)) \
+        {d3d_trace_hr(#hrCall, __FILE__, __LINE__, hr); \
+		 __debugbreak(); }\
+}

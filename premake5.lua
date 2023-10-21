@@ -27,6 +27,8 @@ project "RayTracerDXR"
     includedirs
     {
         "%{prj.name}/src",
+        "%{wks.location}/ThirdParty/dxc",
+        "%{wks.location}/ThirdParty/glm"
     }
     
     libdirs
