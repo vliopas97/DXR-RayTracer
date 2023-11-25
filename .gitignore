@@ -3,16 +3,17 @@
 *.d
 
 # Ignore bin folders
-bin/
 bin-int/
 
-# Ignore VS files and folder
+# Ignore VS files and folders
 .vs/
 **.sln
 **.vcxproj
 **.vcxproj.filters
 **.vcxproj.user
 **.csproj
+**.pdb
+**.exe
 
 # Compiled Object files
 **.slo

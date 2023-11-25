@@ -1,4 +1,4 @@
-workspace "RayTracerDXR"
+ workspace "RayTracerDXR"
     architecture "x64"
     startproject "RayTracerDXR"
     toolset "v143"
@@ -18,8 +18,9 @@ project "RayTracerDXR"
     cppdialect "C++latest"
     staticruntime "off"
     floatingpoint "fast"
+    conformancemode "off"
 
-    targetdir ("bin/" .. OutputDir .. "/%{prj.name}")
+    targetdir ("bin/")
     objdir ("bin-int/" .. OutputDir .. "/%{prj.name}")
 
     linkoptions { "/SUBSYSTEM:WINDOWS"}
@@ -27,19 +28,16 @@ project "RayTracerDXR"
     includedirs
     {
         "%{prj.name}/src",
+        "%{wks.location}/ThirdParty/core",
         "%{wks.location}/ThirdParty/dxc",
         "%{wks.location}/ThirdParty/glm"
-    }
-    
-    libdirs
-    {
-        "%{wks.location}/dxcompiler"
     }
 
     links
     {
         "d3d12.lib",
-        "DXGI.lib"
+        "DXGI.lib",
+        "dxguid.lib"
     }
 
     files
@@ -48,14 +46,20 @@ project "RayTracerDXR"
         "%{prj.name}/src/**.cpp",
         "%{prj.name}/src/**.hlsl"
     }
+
+    filter "files:**.hlsl or files: **.hlsli"
+        shadermodel "4.0_level_9_3"
+        flags "ExcludeFromBuild"
     
     filter "configurations:Debug"
         runtime "Debug"
         symbols "on"
+        targetname "%{prj.name}_d"
 
     filter "configurations:Release"
         runtime "Release"
         symbols "on"
+        targetname "%{prj.name}"
         optimize "Full"
         flags {"LinkTimeOptimization"}
 

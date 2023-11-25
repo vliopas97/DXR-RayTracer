@@ -1,14 +1,21 @@
 #pragma once
 
 #include "Core.h"
+
+#include "Camera.h"
 #include "Window.h"
+#include "Shader.h"
+#include "Sphere.h"
+
+#include "Shaders/HLSLCompat.h"
 
 struct Graphics
 {
     Graphics(Window& window);
     ~Graphics();
 
-    void Tick();
+    void Tick(float delta);
+
 private:
     void Init();
     void Shutdown();
@@ -16,29 +23,28 @@ private:
 
     void CreateDevice();
     void CreateSwapChain();
+    void CreateRTPipelaneState();
 
+    void CreateAccelerationStructures();
+    void CreateShaderResources();
+    void CreateShaderTable();
 
+    void UpdateTexture();
+
+    void InitializeMaterials();
 private:
     HWND WinHandle{ nullptr };
+    SphereComposite Spheres;
 
     IDXGIFactory4Ptr Factory;
     ID3D12DebugPtr Debug;
+    ID3D12Debug1Ptr Debug1;
 
     ID3D12Device5Ptr Device;
-    ID3D12CommandQueuePtr CmdQueue;
     IDXGISwapChain3Ptr SwapChain;
     glm::uvec2 SwapChainSize;
-    ID3D12GraphicsCommandList4Ptr CmdList;
-    ID3D12FencePtr Fence;
-    HANDLE FenceEvent;
-    uint64_t FenceValue = 0;
 
-    struct
-    {
-        ID3D12CommandAllocatorPtr CmdAllocator;
-        ID3D12ResourcePtr SwapChainBuffer;
-        D3D12_CPU_DESCRIPTOR_HANDLE RTVHandle;
-    } FrameObjects[kDefaultSwapChainBuffers];
+    FrameData FrameObjects[kDefaultSwapChainBuffers];
 
     struct HeapData
     {
@@ -47,4 +53,21 @@ private:
     };
     HeapData RTVHeap;
     static const uint32_t RTVHeapSize = 3;
+
+    ID3D12StateObjectPtr PipelineState;
+
+    ID3D12ResourcePtr ShaderTable;
+    uint32_t ShaderTableEntrySize = 0;
+
+    ID3D12ResourcePtr OutputTexture;
+    GlobalBindings GlobalResources;
+    static const uint32_t HeapSize = 2;
+
+    ID3D12ResourcePtr SpheresBuffer;
+
+    ID3D12ResourcePtr Texture;
+    std::array<Material, MaterialType::Count> MatArray = {};
+    ID3D12ResourcePtr Materials;
+
+    Camera SceneCamera;
 };
